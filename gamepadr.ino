@@ -3,7 +3,7 @@
 //pin1 is lh switch
 //pin2 is rh switch
 //pin3 is vibration switch
-
+//now GIT
 #include <ESP8266WiFi.h>
 //#include <ESP8266mDNS.h>
 //#include <WiFiManager.h>
