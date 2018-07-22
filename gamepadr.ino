@@ -30,6 +30,7 @@ int padnumber;
 long int keepalive = 0;
 int maxkeepalive = 1000;
 long int oldmillis;
+long int koldmillis;
 boolean dead = false;
 void setup() {
   // stuff for setup
@@ -80,6 +81,14 @@ void loop() {
     Serial.print("  ");
     Serial.println(switchPos);
   }
+  if (millis() > (koldmillis + 1000)) {
+    //keepalive every 1 s
+    koldmillis=millis();
+    EthernetUdp.beginPacket(remoteIPAddr, localUdpPort);
+    EthernetUdp.write(padnumber);
+    EthernetUdp.endPacket();
+    Serial.printf("sending keepalive %d\n",padnumber);
+  }
   if (((millis()-keepalive) > maxkeepalive)  && !dead) {
     dead=true;
     allpix(255, 255, 255);
@@ -122,6 +131,7 @@ void loop() {
     } else {
       if (len == 1) {
         if (dead) {
+          padnumber = (WiFi.localIP())[3];
           allpix(0, 0, 0);
           dead=false;
         }
